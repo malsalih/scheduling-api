@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('appointments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->morphs('bookable'); // ينشئ عمودي bookable_id و bookable_type
+            $table->timestamp('start_time');
+            $table->timestamp('end_time');
+            $table->string('status')->default('pending');
+            $table->decimal('total_price');
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }

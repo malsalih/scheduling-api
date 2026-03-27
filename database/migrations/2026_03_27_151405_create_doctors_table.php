@@ -11,14 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('working_hours', function (Blueprint $table) {
+        Schema::create('doctors', function (Blueprint $table) {
             $table->id();
-            $table->morphs('bookable');
-            $table->tinyInteger('day_of_week');
-            $table->time('start_time');
-            $table->time('end_time');
-            $table->boolean('is_closed');
-
+            $table->string('name');
+            $table->string('specialization');
             $table->timestamps();
         });
     }
@@ -28,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('working_hours');
+        Schema::dropIfExists('doctors');
     }
 };

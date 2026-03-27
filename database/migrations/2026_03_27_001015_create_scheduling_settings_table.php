@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('scheduling_settings', function (Blueprint $table) {
             $table->id();
+            $table->morphs('bookable');
+            $table->string('scheduling_type');
+            $table->integer('slot_duration');
             $table->timestamps();
         });
     }

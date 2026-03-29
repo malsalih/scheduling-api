@@ -62,5 +62,39 @@ class DatabaseSeeder extends Seeder
             'status' => 'confirmed',
             'total_price' => 150.00,
         ]);
+
+        // 3. إعدادات الجدولة (فترات ثابتة، كل 30 دقيقة)
+        $doctor->schedulingSetting()->create([
+            'scheduling_type' => 'fixed_slots',
+            'slot_duration' => 30,
+        ]);
+
+        // 4. أوقات العمل (نحدد يوم الإثنين كمثال، رقمه 1 في Carbon)
+        $doctor->workingHours()->create([
+            'day_of_week' => 1, // الإثنين
+            'start_time' => '09:00:00',
+            'end_time' => '12:00:00',
+            'is_closed' => false,
+        ]);
+
+        // تاريخ محدد للتجربة (يصادف يوم إثنين) لكي نستخدمه في الرابط
+        $testDate = Carbon::parse('2026-04-06');
+
+        // 5. الفخ! حجز موعد في منتصف الدوام (من 10:00 إلى 10:30)
+        $doctor->appointments()->create([
+            'user_id' => $user->id,
+            'start_time' => $testDate->copy()->setTime(10, 0),
+            'end_time' => $testDate->copy()->setTime(10, 30),
+            'status' => 'confirmed',
+            'total_price' => 150.00,
+
+        ]);
+
+
+        $this->call([
+            RoleSeeder::class,
+        ]);
+
+        $this->command->info('✅ تم زرع البيانات بنجاح! جرب فحص التوافر ليوم 2026-04-06');
     }
 }

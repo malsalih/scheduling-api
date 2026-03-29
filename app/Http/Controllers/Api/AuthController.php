@@ -28,6 +28,7 @@ class AuthController extends Controller
         ]);
 
         $user->assignRole($request->role);
+        
 
 
 

@@ -22,6 +22,10 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
+        $this->call([
+            RoleSeeder::class,
+        ]);
+
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
@@ -32,12 +36,15 @@ class DatabaseSeeder extends Seeder
             'name' => 'أحمد المبرمج',
             'email' => 'ahmed@example.com',
         ]);
+        $user->assignRole('user');
 
         // 2. إنشاء طبيب
         $doctor = Doctor::create([
             'name' => 'د. خالد عبدالله',
             'specialization' => 'طبيب أسنان',
         ]);
+
+        $doctor->assignRole('provider');
 
         // 3. إنشاء ملعب
         $stadium = Stadium::create([
@@ -91,9 +98,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        $this->call([
-            RoleSeeder::class,
-        ]);
+
 
         $this->command->info('✅ تم زرع البيانات بنجاح! جرب فحص التوافر ليوم 2026-04-06');
     }

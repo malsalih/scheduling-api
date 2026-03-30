@@ -37,6 +37,10 @@ class Stadium extends Model implements BookableInterface
 
     protected $guarded = [];
 
+    protected $casts = [
+        'details' => 'array',
+    ];
+
     public function user()
     {
         return $this->morphOne(User::class, 'profile');

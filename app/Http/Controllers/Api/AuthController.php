@@ -28,7 +28,7 @@ class AuthController extends Controller
         ]);
 
         $user->assignRole($request->role);
-        
+
 
 
 
@@ -38,6 +38,12 @@ class AuthController extends Controller
             "success" => true,
             "message" => "User created successfully.",
             "token" => $token,
+            "user" => [ // أضفنا هذا الجزء
+                "id" => $user->id,
+                "name" => $user->name,
+                "email" => $user->email,
+                "role" => $user->getRoleNames()->first(),
+            ],
         ], 200);
     }
 

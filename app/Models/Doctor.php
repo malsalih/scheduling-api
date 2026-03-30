@@ -36,11 +36,15 @@ class Doctor extends Model implements BookableInterface
     use Bookable;
     protected $guarded = [];
 
+    protected $casts = [
+        'details' => 'array',
+    ];
+
     public function user()
     {
         return $this->morphOne(User::class, 'profile');
     }
-    
+
     public function getServiceDetailsAttribute()
     {
         return $this->specialization; // الطبيب يرجع تخصصه

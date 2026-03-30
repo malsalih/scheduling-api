@@ -25,7 +25,10 @@ class ProviderProfileController extends Controller
         $request->validate([
             "service_type" => "required|in:stadium,doctor,custom",
             "name" => "required|string",
-            "specific_detail" => "string",
+            "location" => "nullable|string", // الحقل الجديد
+            "bio" => "nullable|string",      // الحقل الجديد
+            "specific_detail" => "nullable|string", // (تخصص الطبيب أو فئة الخدمة المخصصة)
+            "details" => "nullable|array",
         ]);
 
         $user = Auth::user();
@@ -40,28 +43,30 @@ class ProviderProfileController extends Controller
 
         $newService = null;
 
+        $commonData = [
+            "name" => $request->name,
+            "location" => $request->location,
+            "bio" => $request->bio,
+            "details" => $request->details ?? [], // إذا لم يرسل تفاصيل، نضع مصفوفة فارغة
+        ];
+
         switch ($request->service_type)
         {
             case 'doctor':
-                $newService = Doctor::create([
-                    "name" => $request->name,
+                $newService = Doctor::create(array_merge($commonData, [
                     "specialization" => $request->specific_detail,
-                ]);
-                # code...
+                ]));
                 break;
             case 'stadium':
-                $newService = Stadium::create([
-                    "name" => $request->name,
-                    "location" => $request->specific_detail,
-                ]);
-                # code...
+                $newService = Stadium::create(array_merge($commonData, [
+                    // location موجود مسبقاً في commonData
+                ]));
                 break;
+
             case 'custom':
-                $newService = CustomService::create([
-                    "name" => $request->name,
+                $newService = CustomService::create(array_merge($commonData, [
                     "category_name" => $request->specific_detail,
-                ]);
-                # code...
+                ]));
                 break;
 
             default:
@@ -80,8 +85,8 @@ class ProviderProfileController extends Controller
             "message" => "تم إعداد ملف الخدمة بنجاح",
             "service" => [
                 "name" => $newService->name,
+                "type" => $request->service_type,
                 "details" => $newService->service_details,
-
             ]
         ]);
     }
